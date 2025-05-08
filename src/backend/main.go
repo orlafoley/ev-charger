@@ -1,23 +1,30 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
+	"personweb/models"
+
 	"github.com/gin-gonic/gin"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	// gin.Default is used as the default router
+	// gin.Default
+	// is used as the default router
 	r := gin.Default()
+	models.ConnectDatabase()
 
+	//r.LoadHTMLGlob("templates/*")
 	//API v1
 	v1 := r.Group("/api/vi")
 	{
-		v1.GET("member", getMember)
-		v1.GET("member/:id", getMemberId)
-		v1.POST("member", addMember)
-		v1.PUT("member/:id", updateMember)
-		v1.DELETE("member/:id", deleteMember)
+		v1.GET("getMember", getMember)
+		v1.GET("getMember/:id", getMemberId)
+		v1.POST("addMember", addMember)
+		v1.PUT("updateMember/:id", updateMember)
+		v1.DELETE("DeleteMember/:id", deleteMember)
 		v1.OPTIONS("member", options)
 	}
 
@@ -25,8 +32,26 @@ func main() {
 	r.Run("localhost:5173")
 }
 
+func checkErr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func getMember(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "getMembers Called"})
+	person, err := models.GetAllMember()
+	checkErr(err)
+
+	if err != nil { // Check for errors first
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve members"})
+		return
+	}
+
+	if len(person) == 0 { // Check if the slice is empty (no data found)
+		c.JSON(http.StatusOK, gin.H{"message": "No members found"}) // Or a 404 Not Found if that's more appropriate for your API design
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": person})
+	}
 }
 
 func getMemberId(c *gin.Context) {

@@ -1,4 +1,4 @@
-module loginweb
+module personweb
 
 go 1.24.2
 
