@@ -179,3 +179,41 @@ body {
 .notification-dropdown li:last-child {
   border-bottom: none;
 }
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  width: 150px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.user-dropdown p {
+  margin: 0 0 0.5rem;
+  font-weight: bold;
+}
+
+.user-dropdown button {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  width: 100%;
+  cursor: pointer;
+}
+
+.user-dropdown button:hover {
+  background-color: #dc2626;
+}

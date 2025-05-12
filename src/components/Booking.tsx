@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,36 +9,37 @@ export default function Booking() {
   const [date, setDate] = useState("2025-08-17");
   const [time, setTime] = useState("10:30");
   const [duration, setDuration] = useState("60");
+
+  // Notification and user menu state
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
-  // TODO: Make user input dynamic
-  const handleQuickBook = async () => {
-    try {
-      const response = await fetch("/api/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          slot_id: 1, // TODO: Make this dynamic
-          name: "Demo User",
-          email: "demo@redhat.com",
-          date: "2025-08-17",
-          time: "11:00",
-          duration: 30,
-        }),
-      });
+  // Mock user (replace with real auth later)
+  const user = { name: "Demo User" };
 
-      if (response.ok) {
-        alert("Booking successful!");
-      } else {
-        alert("Booking failed.");
+  // Close dropdowns when clicking outside
+  const userMenuRef = useRef(null);
+  const notifRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        userMenuRef.current &&
+        !(userMenuRef.current as any).contains(event.target)
+      ) {
+        setShowUserMenu(false);
       }
-    } catch (err) {
-      console.error("Error booking slot:", err);
-      alert("An error occurred.");
+      if (
+        notifRef.current &&
+        !(notifRef.current as any).contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
     }
-  };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div>
@@ -47,6 +48,7 @@ export default function Booking() {
           <img src="src/images/redhat-logo.png" alt="Red Hat" className="logo-img" />
           Red Hat
         </div>
+
         {/* TODO: Backend for what happens when you click on these */}
         <nav className="nav">
           <span>
@@ -60,13 +62,14 @@ export default function Booking() {
             Bookings
           </span>
         </nav>
+
         <div className="user-info">
           {/* TODO: Logic for notification bell */}
           <button onClick={() => setShowNotifications(!showNotifications)}>
             <BellIcon />
           </button>
           {showNotifications && (
-            <div className="notification-dropdown">
+            <div className="notification-dropdown" ref={notifRef}>
               <ul>
                 <li>Booking confirmed at 11:00 AM</li>
                 <li>Reminder: 30 mins left</li>
@@ -74,8 +77,22 @@ export default function Booking() {
               </ul>
             </div>
           )}
+
           {/* TODO: Logic to click on the account holder's profile */}
-          <div className="avatar">D</div>
+          <div className="avatar-wrapper" ref={userMenuRef}>
+            <div
+              className="avatar"
+              onClick={() => setShowUserMenu(!showUserMenu)}
+            >
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+            {showUserMenu && (
+              <div className="user-dropdown">
+                <p>{user.name}</p>
+                <button onClick={() => alert("Logging out...")}>Log Out</button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -114,7 +131,7 @@ export default function Booking() {
                 <p>30 Mins</p>
                 <div className="button-wrapper">
                   {/* TODO: Book a slot with this button */}
-                  <Button variant="ghost" className="ghost-button" onClick={handleQuickBook}>
+                  <Button variant="ghost" className="ghost-button">
                     <PlusIcon />
                   </Button>
                 </div>
