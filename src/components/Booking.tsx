@@ -9,6 +9,7 @@ export default function Booking() {
   const [date, setDate] = useState("2025-08-17");
   const [time, setTime] = useState("10:30");
   const [duration, setDuration] = useState("60");
+  const [showNotifications, setShowNotifications] = useState(false);
 
   // TODO: Make user input dynamic
   const handleQuickBook = async () => {
@@ -61,7 +62,18 @@ export default function Booking() {
         </nav>
         <div className="user-info">
           {/* TODO: Logic for notification bell */}
-          <button><BellIcon /></button>
+          <button onClick={() => setShowNotifications(!showNotifications)}>
+            <BellIcon />
+          </button>
+          {showNotifications && (
+            <div className="notification-dropdown">
+              <ul>
+                <li>Booking confirmed at 11:00 AM</li>
+                <li>Reminder: 30 mins left</li>
+                <li>New charger available</li>
+              </ul>
+            </div>
+          )}
           {/* TODO: Logic to click on the account holder's profile */}
           <div className="avatar">D</div>
         </div>
