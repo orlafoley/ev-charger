@@ -70,6 +70,35 @@ export default function Booking() {
     }
   };
 
+  // Regular booking based on form input
+  const handleRegularBooking = async () => {
+    try {
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          slot_id: 1, // TODO: Make this dynamic
+          name: "Demo User",
+          email: "demo@redhat.com",
+          date,
+          time,
+          duration: parseInt(duration, 10),
+        }),
+      });
+
+      if (response.ok) {
+        alert("Booking successful!");
+      } else {
+        alert("Booking failed.");
+      }
+    } catch (err) {
+      console.error("Error booking slot:", err);
+      alert("An error occurred.");
+    }
+  };
+
   return (
     <div>
       <header>
@@ -144,6 +173,13 @@ export default function Booking() {
               <option value="90">90 Mins</option>
             </select>
           </div>
+        </div>
+
+        {/* Regular Booking Submit Button */}
+        <div style={{ marginTop: "1rem" }}>
+          <Button className="book-now-button" onClick={handleRegularBooking}>
+            Book Now
+          </Button>
         </div>
       </section>
 
