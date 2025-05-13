@@ -41,6 +41,35 @@ export default function Booking() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // TODO: Make user input dynamic
+  const handleQuickBook = async () => {
+    try {
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          slot_id: 1, // TODO: Make this dynamic
+          name: "Demo User",
+          email: "demo@redhat.com",
+          date: "2025-08-17",
+          time: "11:00",
+          duration: 30,
+        }),
+      });
+
+      if (response.ok) {
+        alert("Booking successful!");
+      } else {
+        alert("Booking failed.");
+      }
+    } catch (err) {
+      console.error("Error booking slot:", err);
+      alert("An error occurred.");
+    }
+  };
+
   return (
     <div>
       <header>
@@ -130,8 +159,11 @@ export default function Booking() {
                 <p>11:00 AM</p>
                 <p>30 Mins</p>
                 <div className="button-wrapper">
-                  {/* TODO: Book a slot with this button */}
-                  <Button variant="ghost" className="ghost-button">
+                  <Button
+                    variant="ghost"
+                    className="ghost-button"
+                    onClick={handleQuickBook}
+                  >
                     <PlusIcon />
                   </Button>
                 </div>
