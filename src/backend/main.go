@@ -18,7 +18,7 @@ func main() {
 
 	//r.LoadHTMLGlob("templates/*")
 	//API v1
-	v1 := r.Group("/api/vi")
+	v1 := r.Group("/api")
 	{
 		v1.GET("getMember", getMember)
 		v1.GET("getMember/:id", getMemberId)
@@ -26,10 +26,12 @@ func main() {
 		v1.PUT("updateMember/:id", updateMember)
 		v1.DELETE("DeleteMember/:id", deleteMember)
 		v1.OPTIONS("member", options)
+		v1.POST("bookings", quickBooking)
+		v1.GET(("getAllBookings"), getAllBooking)
 	}
 
 	//Router Config
-	r.Run("localhost:5173")
+	r.Run("localhost:8080")
 }
 
 func checkErr(err error) {
@@ -76,4 +78,25 @@ func deleteMember(c *gin.Context) {
 
 func options(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "options"})
+}
+
+func quickBooking(c *gin.Context) {
+
+}
+
+func getAllBooking(c *gin.Context) {
+	booking, err := models.GetAllBooking()
+	checkErr(err)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve members"})
+		return
+	}
+
+	if len(booking) == 0 {
+		c.JSON(http.StatusOK, gin.H{"message": "No Bookings Yet"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": booking})
+	}
+
 }
