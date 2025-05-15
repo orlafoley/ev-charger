@@ -13,6 +13,15 @@ type Bookings struct {
 	Duration int    `json:"duration"`
 }
 
+type BookingRequest struct {
+	SlotID   int    `json:"slot_id" binding:"required"`
+	Name     string `json:"name" binding:"required"`
+	Email    string `json:"email" binding:"required,email"`
+	Date     string `json:"date" binding:"required"`
+	Time     string `json:"time" binding:"required"`
+	Duration int    `json:"duration" binding:"required"`
+}
+
 func InsertNewBooking(b Bookings) error {
 	query := `INSERT INTO "BOOKINGS" ("id", "name", "email", "date", "time", "duration")
               VALUES (?, ?, ?, ?, ?, ?);`

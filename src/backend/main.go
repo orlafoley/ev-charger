@@ -6,6 +6,7 @@ import (
 
 	"personweb/models"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -14,7 +15,23 @@ func main() {
 	// gin.Default
 	// is used as the default router
 	r := gin.Default()
+
+	//Enable CORS for Cross-Origin Resource Sharing
+	r.Use(cors.Default())
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5174"}, // Replace with your frontend URL
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
+
+	// Connection to DB
 	models.ConnectDatabase()
+
+	// Set handler for /api
+	r.GET("/api", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "API SET"})
+	})
 
 	//r.LoadHTMLGlob("templates/*")
 	//API v1
@@ -81,6 +98,27 @@ func options(c *gin.Context) {
 }
 
 func quickBooking(c *gin.Context) {
+	var request models.BookingRequest
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+
+	booking := models.Bookings{
+		Name:     request.Name,
+		Email:    request.Email,
+		Date:     request.Date,
+		Time:     request.Time,
+		Duration: request.Duration,
+	}
+
+	err := models.InsertNewBooking(booking)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to insert booking"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Booking successful"})
 
 }
 
