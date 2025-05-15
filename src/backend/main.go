@@ -3,8 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
-
-	"personweb/models"
+	"src/backend/src/backend/models"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
