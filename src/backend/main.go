@@ -18,7 +18,7 @@ func main() {
 	//Enable CORS for Cross-Origin Resource Sharing
 	r.Use(cors.Default())
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5174"}, // Replace with your frontend URL
+		AllowOrigins:     []string{"http://localhost:5173", "http://locahost:3000"}, // Replace with your frontend URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
@@ -100,6 +100,7 @@ func quickBooking(c *gin.Context) {
 	var request models.BookingRequest
 
 	if err := c.ShouldBindJSON(&request); err != nil {
+		log.Println("Error binding JSON:", err) // Log the error
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
@@ -114,6 +115,7 @@ func quickBooking(c *gin.Context) {
 
 	err := models.InsertNewBooking(booking)
 	if err != nil {
+		log.Println("Error inserting booking:", err) // Log the error
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to insert booking"})
 		return
 	}

@@ -44,13 +44,13 @@ export default function Booking() {
   // TODO: Make user input dynamic
   const handleQuickBook = async () => {
     try {
-      const response = await fetch("/api/bookings", {
+      const response = await fetch("http://localhost:8080/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          slot_id: 1, // TODO: Make this dynamic
+          //slot_id: 1, // TODO: Make this dynamic
           name: "Demo User",
           email: "demo@redhat.com",
           date: "2025-08-17",

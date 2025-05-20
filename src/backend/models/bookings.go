@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -14,7 +16,7 @@ type Bookings struct {
 }
 
 type BookingRequest struct {
-	SlotID   int    `json:"slot_id" binding:"required"`
+	//SlotID   int    `json:"slot_id" binding:"required"`
 	Name     string `json:"name" binding:"required"`
 	Email    string `json:"email" binding:"required,email"`
 	Date     string `json:"date" binding:"required"`
@@ -23,9 +25,12 @@ type BookingRequest struct {
 }
 
 func InsertNewBooking(b Bookings) error {
-	query := `INSERT INTO "BOOKINGS" ("id", "name", "email", "date", "time", "duration")
-              VALUES (?, ?, ?, ?, ?, ?);`
-	_, err := DB.Exec(query, b.Id, b.Name, b.Email, b.Date, b.Time, b.Duration)
+	query := `INSERT INTO "BOOKINGS" ("name", "email", "date", "time", "duration")
+              VALUES (?, ?, ?, ?, ?);`
+	_, err := DB.Exec(query, b.Name, b.Email, b.Date, b.Time, b.Duration)
+	if err != nil {
+		log.Println("Error inserting booking into database:", err) // Log the error
+	}
 	return err
 }
 
