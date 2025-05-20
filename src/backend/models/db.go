@@ -37,8 +37,11 @@ func ConnectDatabase() error {
 		log.Fatal(err)
 	}
 
-	createTableBooking := `CREATE TABLE IF NOT EXISTS BOOKINGS (
+	createTableBooking := `
+	DROP TABLE IF EXISTS BOOKINGS;
+	CREATE TABLE IF NOT EXISTS BOOKINGS (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			slot_id INTEGER NOT NULL,
 			name TEXT NOT NULL,
 			email TEXT NOT NULL,
 			date TEXT NOT NULL,

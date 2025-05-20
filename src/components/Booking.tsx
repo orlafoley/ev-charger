@@ -50,7 +50,7 @@ export default function Booking() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          //slot_id: 1, // TODO: Make this dynamic
+          slot_id: 1, // TODO: Make this dynamic
           name: "Demo User",
           email: "demo@redhat.com",
           date: "2025-08-17",

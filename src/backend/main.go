@@ -106,6 +106,7 @@ func quickBooking(c *gin.Context) {
 	}
 
 	booking := models.Bookings{
+		Slot_ID:  request.Slot_ID,
 		Name:     request.Name,
 		Email:    request.Email,
 		Date:     request.Date,
