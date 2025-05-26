@@ -1,11 +1,14 @@
 package models
 
 import (
+	"log"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type Bookings struct {
 	Id       int    `json:"id"`
+	Slot_ID  int    `json:"slot_id"`
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Date     string `json:"date"`
@@ -14,7 +17,7 @@ type Bookings struct {
 }
 
 type BookingRequest struct {
-	SlotID   int    `json:"slot_id" binding:"required"`
+	Slot_ID  int    `json:"slot_id" binding:"required"`
 	Name     string `json:"name" binding:"required"`
 	Email    string `json:"email" binding:"required,email"`
 	Date     string `json:"date" binding:"required"`
@@ -23,9 +26,12 @@ type BookingRequest struct {
 }
 
 func InsertNewBooking(b Bookings) error {
-	query := `INSERT INTO "BOOKINGS" ("id", "name", "email", "date", "time", "duration")
+	query := `INSERT INTO "BOOKINGS" ("slot_id","name", "email", "date", "time", "duration")
               VALUES (?, ?, ?, ?, ?, ?);`
-	_, err := DB.Exec(query, b.Id, b.Name, b.Email, b.Date, b.Time, b.Duration)
+	_, err := DB.Exec(query, b.Slot_ID, b.Name, b.Email, b.Date, b.Time, b.Duration)
+	if err != nil {
+		log.Println("Error inserting booking into database:", err) // Log the error
+	}
 	return err
 }
 
@@ -40,7 +46,7 @@ func GetAllBooking() ([]Bookings, error) {
 	var bookingList []Bookings
 	for bookings.Next() {
 		var singleBooking Bookings
-		err := bookings.Scan(&singleBooking.Id, &singleBooking.Name, &singleBooking.Email, &singleBooking.Date, &singleBooking.Time, &singleBooking.Duration)
+		err := bookings.Scan(&singleBooking.Id, &singleBooking.Slot_ID, &singleBooking.Name, &singleBooking.Email, &singleBooking.Date, &singleBooking.Time, &singleBooking.Duration)
 		if err != nil {
 			return nil, err
 		}

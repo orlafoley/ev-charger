@@ -44,7 +44,7 @@ export default function Booking() {
   // TODO: Make user input dynamic
   const handleQuickBook = async () => {
     try {
-      const response = await fetch("/api/bookings", {
+      const response = await fetch("http://localhost:8080/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
