@@ -168,9 +168,9 @@ export default function Booking() {
           <div className="input-group">
             <LockIcon className="icon" />
             <select value={duration} onChange={(e) => setDuration(e.target.value)}>
-              <option value="30">30 Mins</option>
               <option value="60">60 Mins</option>
-              <option value="90">90 Mins</option>
+              <option value="120">120 Mins</option>
+              <option value="240">240 Mins</option>
             </select>
           </div>
         </div>
@@ -184,30 +184,49 @@ export default function Booking() {
       </section>
 
       <section className="quick-book">
-        <h2>Quick Book</h2>
-        <div className="grid">
-          {/* TODO: Update this to show different slots rather than the same one three times */}
-          {[1, 2, 3].map((item) => (
-            <Card key={item} className="card">
-              <CardContent>
-                <h3>Charger 1</h3>
-                <p>17/08/2025</p>
-                <p>11:00 AM</p>
-                <p>30 Mins</p>
-                <div className="button-wrapper">
-                  <Button
-                    variant="ghost"
-                    className="ghost-button"
-                    onClick={handleQuickBook}
-                  >
-                    <PlusIcon />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
+      <h2>Quick Book</h2>
+      <div className="grid">
+        {[
+          {
+            charger: "Charger 1",
+            date: "17/08/2025",
+            time: "11:00 AM",
+            duration: "60 Mins",
+          },
+          {
+            charger: "Charger 1",
+            date: "17/08/2025",
+            time: "12:00 PM",
+            duration: "120 Mins",
+          },
+          {
+            charger: "Charger 2",
+            date: "17/08/2025",
+            time: "2:00 PM",
+            duration: "120 Mins",
+          },
+        ].map((slot, index) => (
+          <Card key={index} className="card">
+            <CardContent>
+              <h3>{slot.charger}</h3>
+              <p>{slot.date}</p>
+              <p>{slot.time}</p>
+              <p>{slot.duration}</p>
+              <div className="button-wrapper">
+                <Button
+                  variant="ghost"
+                  className="ghost-button"
+                  onClick={handleQuickBook}
+                >
+                  <PlusIcon />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </section>
+
     </div>
   );
 }
