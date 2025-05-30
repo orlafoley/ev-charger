@@ -1,12 +1,19 @@
 # ev-charger
-Repo for the group project we're working on
+Repo for the group project we're working on. This is a booking system to book a slot on one of two EV chargers. 
 
-To run this in a local development environment, please run the following:
-1. git clone https://github.com/orlafoley/ev-charger.git
-2. cd ev-charger
-3. npm install
-4. npm run dev
+## To run this in a local development environment, please run the following:
+### Frontend
+1. run `git clone https://github.com/orlafoley/ev-charger.git`
+2. run `cd ev-charger`
+3. run `npm install`
+4. run `npm run dev`
 5. Open http://localhost:5173 in your browser
+
+### Backend
+1. Open a second terminal within your IDE
+2. run `cd src/backend`
+3. run `go run main.go`
+4. This is running on http://localhost:8080
 
 To add to this project:
 1. Navigate to the top of this page (https://github.com/orlafoley/ev-charger)
